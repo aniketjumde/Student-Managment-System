@@ -10,65 +10,129 @@
     <title>Update Student - Student Management System</title>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
-    	
-    function openUpdatePopup(trno) {
-   		var tr = document.getElementById(trno);
-		
-		// FIX: Use data attributes instead of textContent for reliable data extraction
-		var srno = tr.getAttribute('data-rno');
-		var sname = tr.getAttribute('data-name');
-		var sper = tr.getAttribute('data-per');
-		
-		var modalRno = document.getElementById("modalRno");
-		var modalName = document.getElementById("modalName");
-		var modalPer = document.getElementById("modalPer");
-		
-		modalRno.value = srno;
-		modalName.value = sname;
-		modalPer.value = sper;
-		
- 		new bootstrap.Modal(document.getElementById("updateModal")).show();
+    
+function openUpdatePopup(trno) {
+    var tr = document.getElementById(trno);
+    
+    // Get data from data attributes
+    var srno = tr.getAttribute('data-rno');
+    var sname = tr.getAttribute('data-name');
+    var sper = tr.getAttribute('data-per');
+    
+    var modalRno = document.getElementById("modalRno");
+    var modalName = document.getElementById("modalName");
+    var modalPer = document.getElementById("modalPer");
+    
+    modalRno.value = srno;
+    modalName.value = sname;
+    modalPer.value = sper;
+    
+    new bootstrap.Modal(document.getElementById("updateModal")).show();
+}
+
+function modify() {
+    var modalRno = document.getElementById("modalRno");
+    var modalName = document.getElementById("modalName");
+    var modalPer = document.getElementById("modalPer");
+    
+    var updateSrno = modalRno.value;
+    var updateSname = modalName.value;
+    var updatePer = modalPer.value;
+    
+    // Get the update button and show loading state
+    var updateBtn = document.querySelector('#updateModal .btn-warning');
+    var originalText = updateBtn.innerHTML;
+    updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
+    updateBtn.disabled = true;
+    
+    // Validation
+    if(!updateSname || !updateSname.trim()) {
+        swal("Error!", "Please enter student name", "error");
+        resetButton(updateBtn, originalText);
+        return;
     }
     
-    function modify() {
-		var modalRno = document.getElementById("modalRno");
-		var modalName = document.getElementById("modalName");
-		var modalPer = document.getElementById("modalPer");
-		
-		var updateSrno = modalRno.value;
-		var updateSname = modalName.value;
-		var updatePer = modalPer.value;
-		
-		// FIX: Add basic validation
-		if(!updateSname.trim()) {
-			swal("Error!", "Please enter student name", "error");
-			return;
-		}
-		
-		if(!updatePer || isNaN(updatePer) || updatePer < 0 || updatePer > 100) {
-			swal("Error!", "Please enter valid percentage (0-100)", "error");
-			return;
-		}
-		
-		fetch("http://localhost:8080/Application-Student-Managment-System/update", {
-			method: 'POST',
-			body  : new URLSearchParams({"trno":updateSrno, "tname": updateSname, "tper": updatePer})
-		})
-		.then(response => response.text())
-		.then(data => {
-			if(data.trim() == 'Success') {
-				document.querySelector('#updateModal  .btn-close').click();
-				swal("Success!", "Record is Updated Successfully !!", "success")
-					.then(()=>location.reload());
-			}
-			if(data.trim() == 'failed') {
-				swal("Failed!", "Failed to Update Record !!", "error")
-			}
-		})
-		.catch(err => console.error("Error:", err))
+    if(!updatePer || isNaN(updatePer) || updatePer < 0 || updatePer > 100) {
+        swal("Error!", "Please enter valid percentage (0-100)", "error");
+        resetButton(updateBtn, originalText);
+        return;
     }
     
-    </script>
+    // Use relative URL instead of hardcoded absolute URL
+    fetch("./update", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            "trno": updateSrno, 
+            "tname": updateSname, 
+            "tper": updatePer
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(data => {
+        if(data.trim() === 'Success') {
+            // Close modal first
+            var modal = bootstrap.Modal.getInstance(document.getElementById("updateModal"));
+            modal.hide();
+            
+            swal("Success!", "Record updated successfully!", "success")
+                .then(() => {
+                    // Update the table row data attributes
+                    var tr = document.getElementById(updateSrno);
+                    if (tr) {
+                        tr.setAttribute('data-name', updateSname);
+                        tr.setAttribute('data-per', updatePer);
+                        
+                        // Update the displayed values in the table
+                        var nameCell = tr.querySelector('td:nth-child(2) .fw-semibold');
+                        var perCell = tr.querySelector('td:nth-child(3) .fw-bold');
+                        var progressBar = tr.querySelector('.progress-bar');
+                        
+                        if (nameCell) nameCell.textContent = updateSname;
+                        if (perCell) perCell.textContent = updatePer + '%';
+                        if (progressBar) progressBar.style.width = updatePer + '%';
+                    }
+                });
+        } else {
+            swal("Failed!", "Failed to update record: " + data, "error");
+        }
+    })
+    .catch(err => {
+        console.error("Error:", err);
+        swal("Error!", "Network error occurred while updating record", "error");
+    })
+    .finally(() => {
+        resetButton(updateBtn, originalText);
+    });
+}
+
+function resetButton(button, originalText) {
+    if (button) {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }
+}
+
+// Add event listener for Enter key in modal
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('updateModal');
+    if (modal) {
+        modal.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                modify();
+            }
+        });
+    }
+});
+
+</script>
 </head>
 <body>
 

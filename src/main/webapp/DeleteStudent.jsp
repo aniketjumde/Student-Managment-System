@@ -10,56 +10,66 @@
     <title>Delete Student - Student Management System</title>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     
-    <script type="text/javascript">
-    
-    function del(srno) {
-        swal({
-            title: "Are you sure?",
-            text: "Do you want to delete Student for Roll Number: " + srno + "?",
-            icon: "warning",
-            buttons: {
-                cancel: {
-                    text: "Cancel",
-                    value: null,
-                    visible: true,
-                    className: "btn btn-secondary",
-                    closeModal: true,
-                },
-                confirm: {
-                    text: "Yes, Delete!",
-                    value: true,
-                    visible: true,
-                    className: "btn btn-danger",
-                    closeModal: true
-                }
+   <script type="text/javascript">
+function del(srno) {
+    swal({
+        title: "Are you sure?",
+        text: "Do you want to delete Student for Roll Number: " + srno + "?",
+        icon: "warning",
+        buttons: {
+            cancel: {
+                text: "Cancel",
+                value: null,
+                visible: true,
+                className: "btn btn-secondary",
+                closeModal: true,
             },
-            dangerMode: true,
-        })
-        .then((willDelete) => {
-            if (willDelete) {
-                fetch("http://localhost:8080/Application-Student-Managment-System/delete", {
-                    method: 'POST',
-                    body: new URLSearchParams({'trno': srno})
-                })
-                .then(response => response.text())
-                .then(data => {
-                    if (data.trim() == "Success") {
-                        swal("Deleted Successfully!!", "Record is Deleted for Roll Number: " + srno, "success");
-                        var tr = document.getElementById(srno);
-                        tr.remove();
-                    }
-                    if (data.trim() == "failed") {
-                        swal("Failed to Delete!", "Failed to Delete Record for Roll Number: " + srno, "error");
-                    }
-                })
-                .catch(error => console.error("MyError while Deleting Rollnumber = " + srno));
-            } else {
-                swal("Delete Skipped!", "Your record is safe :)", "info");
+            confirm: {
+                text: "Yes, Delete!",
+                value: true,
+                visible: true,
+                className: "btn btn-danger",
+                closeModal: true
             }
-        });
-    }
-    
-    </script>
+        },
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            // Use relative URL instead of hardcoded absolute URL
+            fetch("./delete", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({'trno': srno.toString()})
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.trim() === "Success") {
+                    swal("Deleted Successfully!!", "Record is Deleted for Roll Number: " + srno, "success")
+                    .then(() => {
+                        var tr = document.getElementById(srno.toString());
+                        if (tr) {
+                            tr.remove();
+                        }
+                        // Optional: Reload the page to refresh the list
+                        // location.reload();
+                    });
+                } else {
+                    swal("Failed to Delete!", "Failed to Delete Record for Roll Number: " + srno + ". Error: " + data, "error");
+                }
+            })
+            .catch(error => {
+                console.error("Error while Deleting Rollnumber = " + srno, error);
+                swal("Network Error!", "Failed to connect to server.", "error");
+            });
+        } else {
+            swal("Delete Skipped!", "Your record is safe :)", "info");
+        }
+    });
+}
+</script>
 </head>
 <body>
 
