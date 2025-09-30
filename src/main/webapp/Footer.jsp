@@ -76,7 +76,7 @@
             <div class="col-lg-2 col-md-6 mb-4">
                 <h5 class="mb-3">Contribute</h5>
                 <div class="d-flex flex-column">
-                    <a href="https://github.com/aniketjumde/Student_Managment_System" class="text-light opacity-75 text-decoration-none hover-primary mb-3">
+                    <a href="https://github.com/aniketjumde/Student-Managment-System" class="text-light opacity-75 text-decoration-none hover-primary mb-3">
                         <i class="fab fa-github me-2"></i>GitHub Repo
                     </a>
                     <a href="#" class="text-light opacity-75 text-decoration-none hover-primary mb-3">

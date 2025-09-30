@@ -503,7 +503,7 @@
                             <i class="fab fa-linkedin"></i>
                             Connect on LinkedIn
                         </a>
-                        <a href="https://github.com/aniketjumde/Student_Managment_System" target="_blank" class="social-btn github-btn">
+                        <a href="https://github.com/aniketjumde/Student-Managment-System" target="_blank" class="social-btn github-btn">
                             <i class="fab fa-github"></i>
                             View on GitHub
                         </a>
