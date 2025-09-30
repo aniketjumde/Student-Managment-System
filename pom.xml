@@ -4,7 +4,7 @@
                              https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.tca</groupId>
+    <groupId>Application-Student-Managment-System</groupId>
     <artifactId>Application-Student-Managment-System</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging> <!-- Important for web apps -->
@@ -14,6 +14,8 @@
     </properties>
 
     <dependencies>
+    	
+    
         <!-- PostgreSQL JDBC Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
