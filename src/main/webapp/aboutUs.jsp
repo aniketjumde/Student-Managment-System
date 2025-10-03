@@ -317,6 +317,37 @@
             font-weight: 300;
         }
         
+        .education-info {
+            margin: 25px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .education-info p {
+            margin: 15px 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            opacity: 0.95;
+        }
+        
+        .education-info i {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            width: 25px;
+            text-align: center;
+        }
+        
+        .developer-details {
+            position: relative;
+            z-index: 1;
+        }
+        
         .developer-links {
             display: flex;
             justify-content: center;
@@ -385,6 +416,18 @@
             
             .developer-name {
                 font-size: 2rem;
+            }
+            
+            .education-info {
+                padding: 20px 15px;
+                margin: 20px 0;
+            }
+            
+            .education-info p {
+                font-size: 1rem;
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
             }
             
             .developer-links {
@@ -496,8 +539,17 @@
                     <div class="developer-avatar">
                         <i class="fas fa-user-tie"></i>
                     </div>
-                    <div class="developer-name">Aniket Jumde</div>
-                    <div class="developer-title">Java Developer</div>
+                    <div class="developer-name">Aniket Kailas Jumde</div>
+                   
+                    <!-- Education Details -->
+                    <div class="developer-details">
+                        <div class="education-info">
+                            <p><i class="fas fa-university"></i> JSPM's Rajarshi Shahu College of Engineering, Tathawade, Pune</p>
+                            <p><i class="fas fa-graduation-cap"></i> Bachelor of Technology in Information Technology</p>
+                            
+                        </div>
+                    </div>
+                    
                     <div class="developer-links">
                         <a href="https://www.linkedin.com/in/aniket-jumde-74275a289/" target="_blank" class="social-btn linkedin-btn">
                             <i class="fab fa-linkedin"></i>
